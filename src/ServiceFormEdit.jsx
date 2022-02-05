@@ -7,7 +7,6 @@ function ServiceForm({item, toEditMode}) {
   const dispatch = useDispatch();
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(item.id, initName, initPrice);
     dispatch(editService(item.id, initName, initPrice));
     evt.target.reset();
   }
