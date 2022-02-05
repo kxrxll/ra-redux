@@ -1,29 +1,39 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './bootstrap.css';
-import {nanoid} from 'nanoid';
+import {useSelector} from 'react-redux';
+import ServiceFormNew from './ServiceFormNew';
+import ServiceFormEdit from './ServiceFormEdit';
+import ServiceList from './ServiceList';
 
 function Service() {
+
+  // Redux state
+  const items = useSelector(state => state);
+
+  // Edit mode handling
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editItem, setEditItem] = useState(null);
+
+  const toEditMode = () => {
+    isEditMode ? setIsEditMode(false) : setIsEditMode(true);
+  }
+
+  const sendEditItem = (item) => {
+    setEditItem(item);
+  }
+
+
   return (
-    <div class="card" style={{margin:'40px',padding:'20px',width:'60%'}}>
-      <div className="mb-3">
-        <label for="exampleFormControlInput1" className="form-label">Услуга</label>
-        <input type="email" className="form-control" placeholder="Название услуги" />
-      </div>
-      <div className="mb-3">
-        <label for="exampleFormControlInput1" className="form-label">Цена</label>
-        <input type="email" className="form-control" placeholder="Стоимость услуги" />
-      </div>
-      <button class="btn btn-primary" style={{marginBottom:'10px'}}>Сохранить</button>
-      <button class="btn btn-secondary" style={{marginBottom:'10px'}}>Отмена</button>
-      <ul class="list-group">
-        <li class="list-group-item" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-          Стекло 2000₽
-          <div>
-            <button class="btn btn-success">Редактировать</button>
-            <button class="btn btn-danger" style={{marginLeft:'10px'}}>Удалить</button>
-          </div>
-        </li>
-      </ul>
+    <div className="card" style={{margin:'40px',padding:'20px',width:'80%'}}>
+      {!isEditMode ? <ServiceFormNew /> : <ServiceFormEdit 
+        item={editItem} 
+        toEditMode={toEditMode}
+        />}
+      <ServiceList
+        items={items}
+        toEditMode={toEditMode}
+        sendEditItem={sendEditItem}
+      />
     </div>
   )
 }
